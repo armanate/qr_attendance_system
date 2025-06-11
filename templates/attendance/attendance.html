@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}حضور و غیاب - سیستم حضور و غیاب با کد QR{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">لیست حضور و غیاب</h4>
+                <div>
+                    <button id="reset-attendance" class="btn btn-warning me-2">بازنشانی حضور و غیاب</button>
+                    <button id="print-attendance" class="btn btn-primary">چاپ لیست</button>
+                </div>
+            </div>
+            <div class="card-body" id="attendance-content">
+                <div class="alert alert-info mb-4">
+                    <strong>تاریخ:</strong> <span id="current-date">{{ current_date }}</span>
+                </div>
+                
+                <div class="row">
+                    <!-- Present Students -->
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">دانش‌آموزان حاضر ({{ present_students|length }})</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if present_students %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>نام</th>
+                                                <th>شماره دانش‌آموزی</th>
+                                                <th>زمان</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for present in present_students %}
+                                            <tr>
+                                                <td>{{ present.student.student_name }}</td>
+                                                <td>{{ present.student.student_string_id }}</td>
+                                                <td>{{ present.timestamp|date:"H:i:s" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-info">
+                                    هیچ دانش‌آموزی هنوز حاضر نشده است.
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Absent Students -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0">دانش‌آموزان غایب ({{ absent_students|length }})</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if absent_students %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>نام</th>
+                                                <th>شماره دانش‌آموزی</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in absent_students %}
+                                            <tr>
+                                                <td>{{ student.student_name }}</td>
+                                                <td>{{ student.student_string_id }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-info">
+                                    هیچ دانش‌آموزی غایب نیست.
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Reset attendance button
+        document.getElementById('reset-attendance').addEventListener('click', function() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید لیست حضور و غیاب را بازنشانی کنید؟')) {
+                fetch('{% url "reset_attendance" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reload the page to show updated attendance
+                        location.reload();
+                    } else {
+                        alert('خطا: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('خطا:', error);
+                    alert('خطا در بازنشانی حضور و غیاب.');
+                });
+            }
+        });
+        
+        // Print attendance button
+        document.getElementById('print-attendance').addEventListener('click', function() {
+            window.print();
+        });
+    });
+</script>
+{% endblock %}

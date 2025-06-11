@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}کد QR - {{ student.student_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h4 class="mb-0">کد QR برای {{ student.student_name }}</h4>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <img src="/{{ qr_code_path }}" alt="کد QR" class="img-fluid" style="max-width: 300px;">
+                </div>
+                <div class="alert alert-info">
+                    <p class="mb-0">شماره دانش‌آموزی: <strong>{{ student.student_string_id }}</strong></p>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'student_list' %}" class="btn btn-primary">بازگشت به لیست دانش‌آموزان</a>
+                    <a href="/{{ qr_code_path }}" download class="btn btn-success ms-2">دانلود کد QR</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

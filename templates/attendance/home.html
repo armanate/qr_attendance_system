@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}خانه - سیستم حضور و غیاب با کد QR{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-4">سیستم حضور و غیاب با کد QR</h1>
+                <p class="lead">سیستم حضور و غیاب مبتنی بر Django که از کدهای QR برای پیگیری حضور دانش‌آموزان استفاده می‌کند.</p>
+                
+                <div class="row mt-5">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">مدیریت دانش‌آموزان</h5>
+                                <p class="card-text">افزودن، مشاهده و تولید کدهای QR برای دانش‌آموزان.</p>
+                                <a href="{% url 'student_list' %}" class="btn btn-primary">مشاهده دانش‌آموزان</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">اسکن کدهای QR</h5>
+                                <p class="card-text">اسکن کدهای QR برای ثبت حضور دانش‌آموزان.</p>
+                                <a href="{% url 'scan_qr' %}" class="btn btn-primary">برو به اسکنر</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">مشاهده حضور و غیاب</h5>
+                                <p class="card-text">مشاهده دانش‌آموزان حاضر و غایب.</p>
+                                <a href="{% url 'attendance' %}" class="btn btn-primary">مشاهده حضور و غیاب</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
